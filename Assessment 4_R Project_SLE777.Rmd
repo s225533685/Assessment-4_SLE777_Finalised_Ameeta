@@ -201,7 +201,14 @@ t.test(North_east_growth_data,South_west_growth_data)
  
 PART 2: Examining the biological sequence diversity 
 
-step 1: Download the whole set of coding DNA sequences for E. coli and your organism of interest. How many coding sequences are present in these organisms? Present this in the form of a table. Describe any differences between the two organisms. 
+step 1: Downloading the Saprospirale and ecoli sequences, counting the coding sequences (CDS) and comparing the sequences between the two organisms. 
+
+The codes such as sequinr and R.utils were used for smooth downloading, unzipping and reading of CDS data. 
+The compressed FASTA files (.fa.gz) for both the E.coli and Saprospirales were downloaded from the ENSEMBL website using the download.file() function.
+Since the downloaded file was in gzip format, the gunzip() function was used from the R.utils package to extract the .fa files. The overwrite argument was used to overwrite the unzipped file as R usually refuses to overwrite it. The read.fasta() function from the sequinr package was used to load the sequence into R as lists, where each element represents a coding sequence. Then, the length() function was applied on each list of sequences to determine the total number of CDS for each organism. Finally the table was created using data.frame() function with two columns , one for the organism name and one for the number of coding sequences, and displayed it as a table. 
+ 
+As shown in the table,  the Saprospirales contain 4527 coding sequences whereas the E.coli contains 4239 coding sequences. Therefore, the saprospirales has slightly more number of coding sequences than E.coli, which indicates that saprospirales have comparatively more complex genome which could be attributed to their adaptation to diverse environmental conditions. 
+
 ```{r}
 suppressPackageStartupMessages({
   library("seqinr") # is a package designed to process and analyse sequence data.
@@ -210,28 +217,334 @@ suppressPackageStartupMessages({
 # loading e.coli and Saprospirales data 
 library("R.utils")
 
+# Download FASTA file for saprospirales 
 URL="https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/release-62/fasta/bacteria_58_collection/saprospirales_bacterium_gca_003448025/cds/Saprospirales_bacterium_gca_003448025.ASM344802v1.cds.all.fa.gz"
 download.file(URL,destfile="saprospirales_cds.fa.gz")
+
+# Download FASTA file for E.coli
+
 URL="http://ftp.ensemblgenomes.org/pub/bacteria/release-53/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655_gca_000005845/cds/Escherichia_coli_str_k_12_substr_mg1655_gca_000005845.ASM584v2.cds.all.fa.gz"
 download.file(URL,destfile="ecoli_cds.fa.gz")
 
-gunzip("ecoli_cds.fa.gz", overwrite  = TRUE)
-gunzip("saprospirales_cds.fa.gz", overwrite  = TRUE)
+# Uncompress the FASTA files for e.coli
+
+gunzip("ecoli_cds.fa.gz", overwrite  = TRUE) 
+# overwrite = TRUE tells R to replace the uncompressed .fa file if it already exist in the working directory
+
+# Uncompress the FASTA file for Saprospirales 
+gunzip("saprospirales_cds.fa.gz", overwrite  = TRUE) # gunzip is used to uncompress the file
+
+# list files 
 
 list.files()
-# Reading the FASTA file 
+
+# Read the FASTA sequences for e.coli 
 library("seqinr")
-e.coli_cds <- seqinr::read.fasta("ecoli_cds.fa")
+e.coli_cds <- seqinr::read.fasta("ecoli_cds.fa") # read.fasta is used to read the FASTA file 
+
+# Read the FASTA sequences for Saprospirales
 saprospirales_cds <- seqinr::read.fasta("saprospirales_cds.fa")
-# count number of sequences 
+
+# Count the number of coding sequences for e.coli 
 e.coli_number <- length(e.coli_cds)
+
+# Count the number of coding sequences for Saprospirales
 saprospirales_num <- length(saprospirales_cds)
+
 # create table 
 cds_table <- data.frame(
   Bacteria = c("E.coli", "Saprospirales"),
   CDS_count = c(e.coli_number, saprospirales_num)
 )
 cds_table
+
+```
+Step 2: Determing and comparing the total coding DNA between the two organisms.  
+
+To determine the total length of the the sequences in both organisms, the length of each coding sequences was extracted from the respective organisms' cds using summary() function and the first column of the summary was converted to the numeric value using as.numeric() function. Then the total length of all the genes were calculated by summing these values using the sum() function. Then, to display the compiled result of two organisms, the table was created using data.frame() function with columns for organism, number of CDA and total coding DNA.  
+
+It was observed that the Saprospirales has greater total coding DNA (4200321) than that of E.coli (3978528). This indicates that Saprospirales has a larger or more complex genome with potentially more genes or longer coding sequences, which could be attributed to adaptation to a diverse environmental condition. 
+
+```{r}
+
+# Calculate the CDS length for e.coli 
+e.coli_cds_length<- as.numeric(summary(e.coli_cds)[,1]) # 1 select the first column of the matrix 
+
+# Calculate the CDS length for Saprospirales 
+saprospirales_cds_length <- as.numeric(summary(saprospirales_cds)[,1])
+
+# sum total coding DNA of E.coli
+e.coli_total_cds_length <- sum(e.coli_cds_length)
+
+#Sum total coding DNA of Saprospirales 
+saprospirales_total_cds_length <- sum(saprospirales_cds_length)
+
+# create table for the total coding DNA for both organisms
+cds_table <- data.frame(
+  Bacteria = c("E.coli", "Saprospirales"),
+  CDS_count = c(e.coli_number, saprospirales_num),
+  total_coding_DNA = c(e.coli_total_cds_length, saprospirales_total_cds_length)
+)
+cds_table
+
+```
+
+Step 3: Calculate the length of all coding sequences in these two organisms. Make a boxplot of coding sequence length in these organisms. What is the mean and median coding sequence length of these two organisms? Describe any differences between the two organisms.
+
+The length of each coding sequences was extracted from the respective organisms' cds using summary() function and the first column of the summary was converted to the numeric value using as.numeric() function. Then the boxplot() was used to display the distribution of coding aequence lengths in both organisms where red color represented the E.coli coding seuqnece length and blue color represented the Saprospirales coding sequence length.Following that the mean() and median() function was used to summarize the central tendency of CDS lengths. To compare the result between two organisms, the table was generated using data.frame() function, representing the value of CDS count, total coding DNA, mean and median CDS length.
+The mean coding sequence length of E.coli is 938.5534 and the median is 831. Whereas in case of Saprospirales, the mean coding sequence length is 927.8376 and the median is 690. This shows that mean CDS lnegth of E.coli is slightly higher than Saprospirales, indicating that on average E.coli genes are bit longer. Similarly, the median CDS length is substantially higher than Saprospirales, indicating the most E.coli genes are moderately long, whereas Saprospirales has a larger proportion of shorter genes. 
+
+```{r}
+
+# Calculate the CDS length for E.coli 
+e.coli_cds_length<- as.numeric(summary(e.coli_cds)[,1]) # 1 select the first column of the matrix 
+
+# Calculate the CDS length for Saprospirales 
+saprospirales_cds_length <- as.numeric(summary(saprospirales_cds)[,1])
+
+
+# Generate box plot for E.coli and Saprospirales
+boxplot(list(E.coli = e.coli_cds_length, Saprospirales = saprospirales_cds_length),
+        col = c("red", "blue"),
+        ylab = "CDS Length (bp)",
+        main = "Distribution of Coding Sequence Lengths")
+
+# Calculate mean and median of E.coli 
+e.coli_mean_cds_length <- mean(e.coli_cds_length)
+e.coli_median_cds_length <- median(e.coli_cds_length)
+
+# Calculate mean and median of Saprospirales
+saprospirales_mean_cds_length <- mean(saprospirales_cds_length)
+saprospirales_median_cds_length <- median(saprospirales_cds_length)
+
+# Create a table 
+cds_table <- data.frame(
+  Bacteria = c("E.coli", "Saprospirales"),
+  CDS_count = c(e.coli_number, saprospirales_num),
+  total_coding_DNA = c(e.coli_total_cds_length, saprospirales_total_cds_length),
+  mean_cds_length = c(e.coli_mean_cds_length, saprospirales_mean_cds_length),
+  median_cds_length = c(e.coli_median_cds_length, saprospirales_median_cds_length)
+)
+cds_table
+
+
+```
+Step 4: Calculating the frequency of DNA bases and aminoacids in the total coding sequences for both organisms and generating barplots.
+
+The unlist() function was used to turn the list of CDS into a single long vectors of single characters for both the organisms. Then the frequency of dna bases in total coding sequences was calculated using count() function and to obtain single nucleotide count, 1 was used. To obtain the bar plot, the table was plotted using data.frame for nucleotide frequency for both organisms followed by visualisation using the barplot with xlab="nucleotides", ylab="Count", and main="Nucleotide Frequency in CDS". The x-axis represented the nucleotides (A, C, G, T), the y-axis showed their frequencies, and the plot title indicated that it displays the nucleotide composition of organism's coding sequences.
+
+The lapply which applies the translate function to each element of the cds list was used to transalte the dna to protein, resulting in specific organism's prot, a list iif translated protein seuences. Then, unlist() was used ti give a long aminoacid vector. Following that, the aminoacids frequency were counted using the count() function and table was generated for aa frequency of both organisms. Then, the barplot was generated for the aminoacid frequency. 
+
+The higher frequency of adenine (A) was recorded higher in Saprospirales while E.coli recorded slightly higher frequency of guanine(G) content. Cytosine (C) and Thymine (T) levels were comparable between the two species. 
+
+In both the organisms, Leucine (L) and alanine (A) were the most abundant amino acids , followed by glycine (G), serine (S), and valine (V). While overall profiles were similar, E.coli exhibited higher frequencies of acid residues such as aspartic acid (D) and glutamic acid (E), along with slightly more histidine (H). In contrast, Saprospirlaes showed relatively higher frquencies of valine (V), glutamine (Q), and tryptophan(W)
+
+```{r}
+# Unlist the E.coli cds 
+e.coli_dna <- unlist(e.coli_cds)
+
+# Calculate frequency of dna bases in total coding sequences for e.coli
+e.coli_dna_freq <- count(e.coli_dna, 1)   #1 =word size (single nucleotide count)
+
+# Unlist the Saprosipirales cds sequences 
+saprospirales_dna <- unlist(saprospirales_cds)
+
+# Calculate the frequency of dna bases in total coding sequences for Saprospirales
+saprospirales_dna_freq <- count(saprospirales_dna, 1)   # 1 = word size (single nucleotide count)
+
+# Combine into a data frame for plotting
+Dna_freq_df <- data.frame(
+  Base = c("A","C","G","T"),
+  E.coli = e.coli_dna_freq,
+  Saprospirales = saprospirales_dna_freq
+)
+Dna_freq_df
+
+# Generate bar plot for nucleotide frequency 
+barplot(
+  height = rbind(as.numeric(Dna_freq_df$E.coli.Freq), as.numeric(Dna_freq_df$Saprospirales.Freq)),
+  beside = TRUE,      # Place the bar for E.coli and Saprospirales side-by-side
+  names.arg = base_freq_df$Base, # Tells R to represent nucleotide bases (AGTC) at the x-axis 
+  col = c("red", "blue"), # Tells R to give red color to E.coli and blue to saprospirales
+  main = "Nucleotide Frequency in CDS", 
+  ylab = "Count",
+  xlab="nucleotides"
+)
+legend("topright", legend = c("E. coli", "Saprospirales"), fill = c("red", "blue"))
+# topright specify the position of the legend, legend =c("E. coli", "Saprospirales") are the labels of the legend and fill = c("red", "blue") fits the color of the boxes 
+
+# Translate the sequences for e.coli
+e.coli_prot <-lapply(e.coli_cds, translate) # lapply applies the translate function to each element of the cds list, resulting in specific organism_prot, a list of translated protein sequences
+
+# Unlist aminoacids of E.coli
+e.coli_prot_unlist <- unlist(e.coli_prot)
+
+# Count aminoacids 
+aa_alphabet <- c("A","R","N","D","C","Q","E","G","H","I","L","K","M","F","P","S","T","W","Y","V")
+
+# Calculate E.coli aminoacid frequency
+e.coli_aa_freq <- count(e.coli_prot_unlist, wordsize=1, alphabet=aa_alphabet)
+e.coli_aa_freq
+
+
+# Translate the sequences for Saprospirales
+saprospirales_prot <- lapply(saprospirales_cds, translate)
+ 
+# Unlist aminoacids of Saprospirales
+saprospirales_prot_unlist <- unlist(saprospirales_prot)
+
+# Calculate the frequency of aa of Saprospirales 
+Saprospirales_aa_freq <- count(saprospirales_prot_unlist, wordsize=1, alphabet=aa_alphabet)
+Saprospirales_aa_freq
+
+
+# combine the aa frequency into data.frame for plotting 
+aa_freq_df <- data.frame(
+  AA = aa_alphabet,
+  E_coli = e.coli_aa_freq,
+  Saprospirales = Saprospirales_aa_freq
+)
+aa_freq_df
+
+# Generate bar plot for nucleotide frequency 
+barplot(
+  height = rbind(as.numeric(aa_freq_df$E_coli.Freq), as.numeric(aa_freq_df$Saprospirales.Freq)),
+  beside = TRUE,
+  names.arg = aa_freq_df$AA, # Tells R to represent aa texts at the x-axis 
+  col = c("red", "blue"),
+  main = "Nucleotide Frequency in CDS",
+  ylab = "Count", 
+  xlab = "Aminoacids"
+)
+legend("topright", legend = c("E. coli", "Saprospirales"), fill = c("red", "blue"))
+```
+Create a codon usage table and quantify the codon usage bias among all coding sequences. Describe any differences between the two organisms with respect to their codon usage bias. Provide charts to support your observations.
+
+The uco() function from the sequinr package was applied to count all codons (3-base sequences) in the DNA sequences. The codons were sorted using order() function to ensure that the codon table is consistent for both organisms. Following that, the table was created to compare the codon counts between the organisms, where each row is a codon with counts in E.coli and Saprospirales. 
+Then, the index="rscu" was employed to compute relative synonymous codon usage which is a measure of codon usage bias. Here, the RSCU > 1 indicates that codon is used more frequently than expected for the amino acid while RSCU <1 indicates that codon is used less frequently than expected. The data.frame was kept TRUE to convert the result into plotting. 
+
+The barchart was generated for codon usage bias  using rbind() function which makes matrix with rows = organisms and columns = codons. Then beside=TRUE was used to keep the charts of two organisms side by side for comparison and legend was added to the chart. 
+
+As shown in the chart, the E.coli shows stronger peaks for certain codons, indicating higher codon usage bias while Saprospirales exhibit more even distributions across synonymous codons, suggesting weaker codon preference. Moreover, some of the codons which are less used in saprospirales and simlarly, the codons which are are more used in Saprospirales are comparatively less used in E.coli. This shows that the two organisms are adapeted to different tRNA pools and translational pressures. 
+
+```{r}
+# Determining codon usage for e.coli
+e.coli_codon_usage <- uco(e.coli_dna)
+e.coli_codon_usage <- e.coli_codon_usage[order(names(e.coli_codon_usage))]  # sort codons
+e.coli_codon_usage
+
+# Determining codon usage for saprospirales
+saprospirales_codon_usage <- uco(saprospirales_dna) # uco() returns counts of each codon.
+saprospirales_codon_usage <- saprospirales_codon_usage[order(names(saprospirales_codon_usage))]  # sort codons
+saprospirales_codon_usage
+
+# Creating table for codon_usage for E.coli and Saprospirales
+codons <- names(e.coli_codon_usage)
+bacteria_codon_table <- data.frame(
+  Codon = codons,
+  E.coli_count = as.numeric(e.coli_codon_usage),
+  Saprospirales_count = as.numeric(saprospirales_codon_usage)
+  )
+bacteria_codon_table
+
+# Calculation of RSCU values for E.coli 
+e.coli_codon_usage_bias <- uco(e.coli_dna, index="rscu", as.data.frame=TRUE)
+
+# Calculation of RSCU values for Saprospirales
+saprospirales_codon_usage_bias <- uco(saprospirales_dna, index="rscu", as.data.frame=TRUE)
+e.coli_codon_usage_bias
+
+
+# generate barchart for codon usage bias for e.coli and saprospirales
+RCSU_matrix <-rbind(E.coli = e.coli_codon_usage_bias$freq, Saprospirales = saprospirales_codon_usage_bias$freq)
+barplot(RCSU_matrix,
+        beside = TRUE,
+        names.arg = e.coli_codon_usage_bias$AA,
+        legend.text = TRUE,
+        ylab = "codon usage bias (RSCU)",
+        xlab = "Codons",
+        main = "Codon usage frequency usage comparison"
+        )
+grid()
+
+```
+Step 6: In the organism of interest, identify 10 protein sequence k-mers of length 3-5 which are the most over- and under-represented k-mers in your organism of interest. Are these k-mers also over- and under-represented in E. coli to a similar extent? Provide plots to support your observations. Why do you think these sequences are present at different levels in the genomes of these organisms?
+```{r}
+# Translate the sequences for e.coli
+e.coli_prot <-lapply(e.coli_cds, translate) # lapply applies the translate function to each element of the cds list, resulting in specific organism_prot, a list of translated protein sequences
+
+# Unlist aminoacids of E.coli
+e.coli_prot_unlist <- unlist(e.coli_prot)
+
+# Calculate 3-mer (amino acid triplet) frequency in E. coli protein sequences
+e.coli_prot_3_count <- count(e.coli_prot_unlist, wordsize = 3, alphabet = aa_alphabet)
+
+e.coli_prot_4_count <- count(e.coli_prot_unlist, wordsize = 4, alphabet = aa_alphabet)
+
+w.coli_prot_5_count <-  count(e.coli_prot_unlist, wordsize = 5, alphabet = aa_alphabet)
+
+# Structure the e.coli_prot_count 
+str(e.coli_prot_count)
+
+# Translate the sequences for Saprospirales
+saprospirales_prot <- lapply(saprospirales_cds, translate)
+ 
+# Unlist aminoacids of Saprospirales
+saprospirales_prot_unlist <- unlist(saprospirales_prot)
+
+# Calculate 3-mer (amino acid triplet) frequency in Saprospirales protein sequences
+Saprospirales_prot_3_count <- count(saprospirales_prot_unlist, wordsize = 3, alphabet = aa_alphabet)
+Saprospirales_prot_4_count <- count(saprospirales_prot_unlist, wordsize = 4, alphabet = aa_alphabet)
+Saprospirales_prot_5_count <- count(saprospirales_prot_unlist, wordsize = 5, alphabet = aa_alphabet)
+
+# Function to get top over- and under-represented k-mers
+top_kmers <- function(kmer_counts, N = 10){
+  kmer_sorted <- sort(kmer_counts)
+  under <- head(kmer_sorted[kmer_sorted > 0], N)  # smallest non-zero counts
+  over  <- tail(kmer_sorted, N)                   # largest counts
+  list(over = over, under = under)
+}
+
+# Saprospirales 3-mers
+Saprospirales_k3_top <- top_kmers(Saprospirales_prot_3_count)
+Saprospirales_k3_top
+
+# E. coli 3-mers
+k3_top_ecoli <- top_kmers(e.coli_prot_3_count)
+
+# Get counts of Saprospirales over- and under-represented 3-mers in E. coli
+compare_kmers <- function(target_kmers, organism_kmer_counts){
+  organism_kmer_counts[names(target_kmers)]
+}
+
+# Over-represented in Saprospirales
+k3_over_in_ecoli <- compare_kmers(k3_top_sapro$over, e.coli_prot_3_count)
+
+# Under-represented in Saprospirales
+k3_under_in_ecoli <- compare_kmers(k3_top_sapro$under, e.coli_prot_3_count)
+
+over_df <- data.frame(
+  Kmer = names(k3_top_sapro$over),
+  Sapro = as.numeric(k3_top_sapro$over),
+  E_coli = as.numeric(k3_over_in_ecoli)
+)
+
+barplot(
+  t(as.matrix(over_df[,2:3])),
+  beside = TRUE,
+  col = c("blue", "red"),
+  names.arg = over_df$Kmer,
+  las = 2,  # rotate x-axis labels
+  ylab = "Count",
+  main = "Top 10 Over-represented 3-mers: Saprospirales vs E. coli"
+)
+legend("topright", legend=c("Saprospirales", "E. coli"), fill=c("blue","red"))
+
+
+
+# Structure the e.coli_prot_count 
+str(Saprospirales_prot_count)
+
 
 ```
 
