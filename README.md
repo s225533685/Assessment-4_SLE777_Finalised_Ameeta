@@ -6,13 +6,17 @@ Date: 2025-10-05
 
 This repository contains the R Markdown project for gene expression analysis, tree growth data interpreation, and biological sequence diversity analysis for E.coli and saprospirales (organism of interest). The project is divided into several scritps and steps, each performing a specific analysis. 
 
-GENE EXPRESSION ANALYSIS
+# GENE EXPRESSION ANALYSIS
 
-Purpose: The main purpose of gene expression analysis is to download, process, and analyze gene expression data to identify the genes with the highest and lowest mean expression and to visualize the distribution. 
+# Purpose: 
 
-Input: The input includes gene_expression.tsv which was downloaded from github. 
+The main purpose of gene expression analysis is to download, process, and analyze gene expression data to identify the genes with the highest and lowest mean expression and to visualize the distribution. 
 
-Steps and outputs
+# Input:
+
+The input includes gene_expression.tsv which was downloaded from github. 
+
+# Steps and outputs
  
 1. Download and read data
 Step: To download the file and read data, the download.file()and read.table() function is used.
@@ -44,13 +48,17 @@ Step: The hist() function is used to visualise the mean data distributions
 Output: The histogram plot showing low and high expression patterns are obtained 
 
 
-TREE GROWTH DATA ANALYSIS
+# TREE GROWTH DATA ANALYSIS
 
-Purpose: The purpose of running this script is to analyse tree circumference at different sites over different time periods and to calculate the growth over the years and to visualise the differences between different study time periods and at different sites. 
+# Purpose: 
 
-Input: The input file is growth_data.csv (downloaded from GitHub)
+The purpose of running this script is to analyse tree circumference at different sites over different time periods and to calculate the growth over the years and to visualise the differences between different study time periods and at different sites. 
 
-Steps / Outputs:
+# Input: 
+
+The input file is growth_data.csv (downloaded from GitHub)
+
+# Steps / Outputs:
 
 1. Import growth data
 
@@ -83,13 +91,17 @@ Step: The t-test function is used to determine the p-value for the different sit
 
 Output: P-value at 5% significance is achieved. 
 
-BIOLOGICAL SEQUENCE DIVERSITY ANALYSIS
+# BIOLOGICAL SEQUENCE DIVERSITY ANALYSIS
 
-Purpose: The purpose of the script is to download CDS sequences for organism of interest or target organism, analyze genome features, amino acid composition, codon usage, and k-mer distribution.
+#Purpose: 
 
-Input:FASTA files are used as input. 
+The purpose of the script is to download CDS sequences for organism of interest or target organism, analyze genome features, amino acid composition, codon usage, and k-mer distribution.
 
-Steps / Outputs:
+# Input
+
+FASTA files are used as input. 
+
+# Steps / Outputs:
 
 1. Download and read CDS sequences:
 
@@ -133,9 +145,11 @@ Step: The k-mer frequnecy in protein sequence is calculatedusing count() functio
 
 Output: Side-by-side barplots comparing k-mers of of organism of interest and other organism is displayed. 
 
-Comparison and interpretation: The k-mers that are common or unique are identified between the organisms.The difference in K-mer representation due to codon usage bias, GC conten and protein function adaaptation is observed. 
+# Comparison and interpretation: 
 
-Dependencies
+The k-mers that are common or unique are identified between the organisms.The difference in K-mer representation due to codon usage bias, GC conten and protein function adaaptation is observed. 
+
+# Dependencies
 
 The following R packages are used in the project:
 
@@ -151,7 +165,7 @@ Assessment4/
 ├── Assessment_4_R-Project_SLE777.Rmd       # R Markdown file containing all scripts and analysis
 ├── README.md                    # Project README file
 
-Usage
+# Usage
 
 Open Assessment4_SLE777.Rmd in RStudio.
 

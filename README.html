@@ -359,14 +359,22 @@ analysis, tree growth data interpreation, and biological sequence
 diversity analysis for E.coli and saprospirales (organism of interest).
 The project is divided into several scritps and steps, each performing a
 specific analysis.</p>
-<p>GENE EXPRESSION ANALYSIS</p>
-<p>Purpose: The main purpose of gene expression analysis is to download,
-process, and analyze gene expression data to identify the genes with the
-highest and lowest mean expression and to visualize the
-distribution.</p>
-<p>Input: The input includes gene_expression.tsv which was downloaded
-from github.</p>
-<p>Steps and outputs</p>
+<div id="gene-expression-analysis" class="section level1">
+<h1>GENE EXPRESSION ANALYSIS</h1>
+</div>
+<div id="purpose" class="section level1">
+<h1>Purpose:</h1>
+<p>The main purpose of gene expression analysis is to download, process,
+and analyze gene expression data to identify the genes with the highest
+and lowest mean expression and to visualize the distribution.</p>
+</div>
+<div id="input" class="section level1">
+<h1>Input:</h1>
+<p>The input includes gene_expression.tsv which was downloaded from
+github.</p>
+</div>
+<div id="steps-and-outputs" class="section level1">
+<h1>Steps and outputs</h1>
 <ol style="list-style-type: decimal">
 <li>Download and read data Step: To download the file and read data, the
 download.file()and read.table() function is used.</li>
@@ -400,13 +408,23 @@ obtained</p>
 distributions</p>
 <p>Output: The histogram plot showing low and high expression patterns
 are obtained</p>
-<p>TREE GROWTH DATA ANALYSIS</p>
-<p>Purpose: The purpose of running this script is to analyse tree
-circumference at different sites over different time periods and to
-calculate the growth over the years and to visualise the differences
-between different study time periods and at different sites.</p>
-<p>Input: The input file is growth_data.csv (downloaded from GitHub)</p>
-<p>Steps / Outputs:</p>
+</div>
+<div id="tree-growth-data-analysis" class="section level1">
+<h1>TREE GROWTH DATA ANALYSIS</h1>
+</div>
+<div id="purpose-1" class="section level1">
+<h1>Purpose:</h1>
+<p>The purpose of running this script is to analyse tree circumference
+at different sites over different time periods and to calculate the
+growth over the years and to visualise the differences between different
+study time periods and at different sites.</p>
+</div>
+<div id="input-1" class="section level1">
+<h1>Input:</h1>
+<p>The input file is growth_data.csv (downloaded from GitHub)</p>
+</div>
+<div id="steps-outputs" class="section level1">
+<h1>Steps / Outputs:</h1>
 <ol style="list-style-type: decimal">
 <li>Import growth data</li>
 </ol>
@@ -446,12 +464,20 @@ the new column. The mean value is obtained using mean() function.</p>
 <p>Step: The t-test function is used to determine the p-value for the
 different sites to compare the growth between the sites.</p>
 <p>Output: P-value at 5% significance is achieved.</p>
-<p>BIOLOGICAL SEQUENCE DIVERSITY ANALYSIS</p>
-<p>Purpose: The purpose of the script is to download CDS sequences for
-organism of interest or target organism, analyze genome features, amino
-acid composition, codon usage, and k-mer distribution.</p>
-<p>Input:FASTA files are used as input.</p>
-<p>Steps / Outputs:</p>
+</div>
+<div id="biological-sequence-diversity-analysis" class="section level1">
+<h1>BIOLOGICAL SEQUENCE DIVERSITY ANALYSIS</h1>
+<p>#Purpose:</p>
+<p>The purpose of the script is to download CDS sequences for organism
+of interest or target organism, analyze genome features, amino acid
+composition, codon usage, and k-mer distribution.</p>
+</div>
+<div id="input-2" class="section level1">
+<h1>Input</h1>
+<p>FASTA files are used as input.</p>
+</div>
+<div id="steps-outputs-1" class="section level1">
+<h1>Steps / Outputs:</h1>
 <ol style="list-style-type: decimal">
 <li>Download and read CDS sequences:</li>
 </ol>
@@ -515,11 +541,15 @@ and under-expressed k-mers of organism of interest. The barplot()
 function is used to create side-by-side bars for each k-mer.</p>
 <p>Output: Side-by-side barplots comparing k-mers of of organism of
 interest and other organism is displayed.</p>
-<p>Comparison and interpretation: The k-mers that are common or unique
-are identified between the organisms.The difference in K-mer
-representation due to codon usage bias, GC conten and protein function
-adaaptation is observed.</p>
-<p>Dependencies</p>
+</div>
+<div id="comparison-and-interpretation" class="section level1">
+<h1>Comparison and interpretation:</h1>
+<p>The k-mers that are common or unique are identified between the
+organisms.The difference in K-mer representation due to codon usage
+bias, GC conten and protein function adaaptation is observed.</p>
+</div>
+<div id="dependencies" class="section level1">
+<h1>Dependencies</h1>
 <p>The following R packages are used in the project:</p>
 <p>install.packages(c(“seqinr”, “R.utils”))</p>
 <p>File Structure Assessment4/ │ ├── geneexpression.tsv # Raw gene
@@ -528,12 +558,15 @@ ecoli_cds.fa.gz # Compressed E.coli CDS ├── saprospirales_cds.fa.gz #
 Compressed Saprospirales CDS ├── Assessment_4_R-Project_SLE777.Rmd # R
 Markdown file containing all scripts and analysis ├── README.md #
 Project README file</p>
-<p>Usage</p>
+</div>
+<div id="usage" class="section level1">
+<h1>Usage</h1>
 <p>Open Assessment4_SLE777.Rmd in RStudio.</p>
 <p>Run all chunks sequentially to reproduce analyses and figures.</p>
 <p>All plots and summary tables will be generated in the PDF output.</p>
 <p>This README provides clear guidance on purpose, inputs, steps,
 outputs, and file organization for anyone accessing the repository.</p>
+</div>
 
 
 
