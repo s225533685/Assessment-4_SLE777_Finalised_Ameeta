@@ -167,7 +167,8 @@ Southwest_mean_growth_data
 
 Step 10: Using the t.test to estimate the p-value 
 
-The p-value for the two sites were determined using t-test function to compare the 10 years growth between two sites.The study observed higher mean 10-year growth at the northeast site compared to soutwest site but the growth difference was not statistically significant at 5% significance level ```{r}
+The p-value for the two sites were determined using t-test function to compare the 10 years growth between two sites.The study observed higher mean 10-year growth at the northeast site compared to soutwest site but the growth difference was not statistically significant at 5% significance level
+```{r}
 t.test(North_east_growth_data,South_west_growth_data)
 ```
  
@@ -361,13 +362,13 @@ aa_freq_df <- data.frame(
 )
 aa_freq_df
 
-# Generate bar plot for nucleotide frequency 
+# Generate bar plot for amino acid frequency 
 barplot(
   height = rbind(as.numeric(aa_freq_df$E_coli.Freq), as.numeric(aa_freq_df$Saprospirales.Freq)),
   beside = TRUE,
   names.arg = aa_freq_df$AA, # Tells R to represent aa texts at the x-axis 
   col = c("red", "blue"),
-  main = "Nucleotide Frequency in CDS",
+  main = "Amino acid frequency in E.coli and Saprospirales",
   ylab = "Count", 
   xlab = "Aminoacids"
 )
@@ -417,7 +418,7 @@ barplot(RCSU_matrix,
         )
 grid()
 ```
-Step 6: Indetifying over- and under- expressed k-mers of length 3-5
+Step 6: Identifying over- and under- expressed k-mers of length 3-5
 
 The k-mer frequencies of 3- 4- and 5- were calculated using count() function and the custom top k-markers function which sort the k-mer by frequency was used to extract the top 10 most over- and under- expressed k-mers in both organisms. Then, the common over- and under-expressed k-merrss were check using the intersect function and the unique k-mers were checked using setdiff() function. To check if the the top over- and under-pressed k-mers in saprospirales are also expressed to similar extent in E.coli, the raw k-mer counts from E.coli was taken, using 0 if the k-mer was absent. This included the frequency even if the k-mer was not over- or under-represented in E.coli. For each set of k-mers, the matrix were created and saprospirales count were taken from top-kmers() results. The barplot() function was used to create side-by-side bars for each k-mer. Using this function, separate bar plots were created for 3-,4-, and 5-ners, and for over- and under- expressed k-mers for visual idnetification and comparison with that of E.coli. 
 
@@ -449,7 +450,7 @@ top_kmers <- function(kmer_counts, N = 10) {
   list(over = over, under = under)
 }
 
-# CalculatE the top over- and under- pressed k-mers 
+# CalculatE the top over- and under-expressed k-mers 
 Saprospirales_3_mer<- top_kmers(Saprospirales_prot_3_count, N = 10)
 Saprospirales_3_mer
 Saprospirales_4_mer <- top_kmers(Saprospirales_prot_4_count, N = 10)
